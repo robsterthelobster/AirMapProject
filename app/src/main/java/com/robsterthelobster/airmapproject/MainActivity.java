@@ -35,6 +35,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class MainActivity extends AppCompatActivity implements
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
@@ -65,20 +66,6 @@ public class MainActivity extends AppCompatActivity implements
         AirMap.init(MainActivity.this);
 
         setSupportActionBar(toolbar);
-
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(mLocation != null){
-                    callAirMap(mLocation.getLatitude(), mLocation.getLongitude());
-                    Snackbar.make(view, "Getting flight status", Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
-                }else {
-                    Snackbar.make(view, "Location not available", Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
-                }
-            }
-        });
 
         if (mGoogleApiClient == null) {
             mGoogleApiClient = new GoogleApiClient.Builder(this)
@@ -211,5 +198,17 @@ public class MainActivity extends AppCompatActivity implements
                 mRecyclerView.smoothScrollToPosition(mData.size() - 1);
             }
         });
+    }
+
+    @OnClick(R.id.fab)
+    public void updateWithLastLocation(View view) {
+        if(mLocation != null){
+            callAirMap(mLocation.getLatitude(), mLocation.getLongitude());
+            Snackbar.make(view, "Getting flight status", Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show();
+        }else {
+            Snackbar.make(view, "Location not available", Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show();
+        }
     }
 }
